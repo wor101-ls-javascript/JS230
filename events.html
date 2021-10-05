@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>your page title goes here</title>
+    <meta charset="utf-8"/>
+    <style>
+            .x {
+        position: absolute;
+        transform: rotate(45deg);
+        top: 20px;
+        left: 20px;
+      }
+
+      .x .horizontal {
+        width: 45px;
+        height: 5px;
+        position: absolute;
+        left: -20px;
+        background: red;
+      }
+
+      .x .vertical {
+        height: 45px;
+        width: 5px;
+        background: red;
+        position: absolute;
+        left: 0px;
+        top: -20px;
+      }
+    </style>
+    <script>
+      document.addEventListener('mousemove', event => {
+        let x = document.querySelector('.x');
+
+        x.style.left = String(event.clientX) + 'px';
+        x.style.top = String(event.clientY) + 'px';
+      });
+
+      document.addEventListener('keydown', event => {
+        let xHorizontal = document.querySelector('.x .horizontal');
+        let xVertical = document.querySelector('.x .vertical');
+        console.log(event.key);
+
+        switch (event.key) {
+          case 'b':
+            xHorizontal.style.background = 'blue';
+            xVertical.style.background = 'blue';
+            break;
+          case 'g':
+            xHorizontal.style.background = 'green';
+            xVertical.style.background = 'green';
+            break;
+          case 'r':
+            xHorizontal.style.background = 'red';
+            xVertical.style.background = 'red';
+            break;
+        }
+        // if (event.key === 'b') {
+        //   xHorizontal.style.background = 'blue';
+        //   xVertical.style.background = 'blue';
+        // }
+      });
+    </script> 
+  </head>
+  <body>
+    <div class="x">
+      <div class="horizontal"></div>
+      <div class="vertical"></div>
+    </div>
+
+  </body>
+</html>
+
+<!--
+  1.
+  Starting with the template below, write some JavaScript code to move the red X to the last position in the document that the user clicked. 
+  Click the "EDIT ON CODEPEN" button on the upper-right to edit the template.
+
+        document.addEventListener('click', event => {
+        let x = document.querySelector('.x');
+        x.style.left = String(event.clientX) + 'px';
+        x.style.top = String(event.clientY) + 'px';
+      });
+
+  2.
+  Update your solution to the previous problem to make the red X move as you move the mouse around the document instead of depending on clicks.
+
+        document.addEventListener('mousemove', event => {
+        let x = document.querySelector('.x');
+        x.style.left = String(event.clientX) + 'px';
+        x.style.top = String(event.clientY) + 'px';
+      });
+
+  3. Update your solution to the previous problem to change the color of the red X to blue when the user presses the b key, 
+     green in response to the g key, and red in response to r. The X should continue to follow the mouse around.
+-->
