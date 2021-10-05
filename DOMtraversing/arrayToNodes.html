@@ -1,0 +1,61 @@
+<!--
+Implement a function that converts a nested array of nodeNames (see Nodes to Array exercise for examples) to nodes. 
+Go over the sample code and the corresponing return values below as a guide for what you will implement.
+
+steps:
+- create new node using 0 index of nodes
+- if index 1 is empty array 
+  - stop and return node
+- else loop over index 1 
+  - append to new node the return of passing current element to function
+- return new node
+-->
+
+
+<!doctype html>
+<html>
+  <head>
+    <title>Nodes to Array</title>
+  </head>
+  <body>
+    <script>
+    // Nested array of nodes
+    const nodes = ["BODY",[["DIV",[["DIV",[]],["DIV",[["DIV",[]]]]]],["DIV",[]],["DIV",[["DIV",[]],["DIV",[]],["DIV",[]]]]]];
+
+    // OR
+    //
+    // ["BODY", [
+    //   ["DIV", [
+    //     ["DIV", []],
+    //     ["DIV", [
+    //       ["DIV",[]]]]]],
+    //   ["DIV", []],
+    //   ["DIV", [
+    //     ["DIV", []],
+    //     ["DIV", []],
+    //     ["DIV", []]]]]]
+
+      function arrayToNodes(nodes) {
+        let newNode = document.createElement(nodes[0]);
+        
+        if (nodes[1].length === 0) {
+          return newNode;
+        } else {
+          nodes[1].forEach(elem => newNode.appendChild(arrayToNodes(elem)));
+        }
+        console.log(newNode);
+        return newNode;
+      }
+   
+      arrayToNodes(nodes);
+    </script>
+  </body>
+</html>
+
+<!--
+  <body>
+    <header></header>
+    <main></main>
+    <footer></footer>
+  </body>
+-->

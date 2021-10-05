@@ -1,0 +1,76 @@
+<!-- 
+Implement a function that converts the DOM, starting from the body, to nested arrays. 
+Each element in the DOM is represented as ["PARENT_TAG_NAME", [children]] where children are elements as well and as such follow the same format. 
+When an element has no children, it's represented as ["PARENT_TAG_NAME", []]. 
+For instance, if the HTML doesn't have any elements inside the body, 
+the result array would be: ["BODY", []]. Likewise, if the HTML only has a div element as its content, the result array would be: ["BODY", [["DIV", []]]].
+
+Go over the examples below to better visualize how the DOM is represented as nested arrays.
+
+Problem:
+- created an array with 2 elements
+  - first element is always "BODY"
+  - second element is a 2 dimensional Array of all elements in the body
+    - each array element  has a string representing element tag 
+    - AND an array of all children elements
+
+Steps:
+- created empty array
+- get body node to start
+- add body tag to empty array's first element
+
+- create function that returns element tag and an array of its children nodes (accepts a node)
+  - create currentElement array ["elementTag", []]
+  - loop over children nodes
+    - if child node has no children, 
+      -add it to seond element in currentElementarray ["childTag", []]
+    - else 
+      -pass child node to function
+      - add return result to currentElement array's second element
+  - return currentElement array
+
+-->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Nodes to Array</title>
+  </head>
+  <body>
+    <div id="1">
+      <div id="4"></div>
+      <div id="5">
+        <div id="6"></div>
+      </div>
+    </div>
+    <div id="2"></div>
+    <div id="3">
+      <div id="7"></div>
+      <div id="8"></div>
+      <div id="9"></div>
+    </div>
+    <script>
+      function nodesToArr() {
+        let body = document.querySelector('body');
+        let nodesArray = createElementArray(body);
+        console.log(nodesArray);
+        return nodesArray;
+      }
+  
+      function createElementArray(node) {
+        let currentElement = [node.nodeName, []];
+  
+        let childElements = node.children;
+        for (let index = 0; index < childElements.length; index += 1) {
+          if (childElements[index].children.length === 0) {
+            currentElement[1].push([childElements[index].tagName, []]);
+          } else {
+            currentElement[1].push(createElementArray(childElements[index]));
+          }
+        }
+        return currentElement;
+      }
+      nodesToArr();
+    </script>
+  </body>
+</html>
