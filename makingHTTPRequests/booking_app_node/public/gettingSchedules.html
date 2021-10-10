@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>your page title goes here</title>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <p>Getting Schedules<p>
+    <script>
+      let schedules;
+      let fired = false;
+
+      function availableSchedules() {
+        let request = new XMLHttpRequest();
+        request.open('GET', '/api/schedules');
+        request.timeout = 5000;
+        let available;
+
+        request.addEventListener('load', event => {
+          schedules = JSON.parse(request.responseText);
+          available = {};
+
+          schedules.forEach(sched => {
+            if (sched.student_email === null) {
+              let staffID = 'staff ' + String(sched['staff_id']);
+              available[staffID] = available[staffID] || 0;
+              available[staffID] += 1;
+            }
+          });
+
+          if (Object.keys(available).length <= 0) {
+            alert('No available schedules');
+          } else {
+            let staffIDs = Object.keys(available);
+            let alertMessage = [];
+
+            staffIDs.forEach(id => {alertMessage.push(`${id}: ${available[id]}`)});
+            alertMessage = alertMessage.join('\n');
+            alert(alertMessage);
+          }
+        });
+        
+        request.addEventListener('timeout', event => {
+          alert('TIMEOUT!');
+        });
+
+        request.addEventListener('loadend', () => {
+          alert('Request completed');
+        });
+
+        request.send();        
+      }      
+      
+      availableSchedules();
+    </script>
+
+  </body>
+</html>
+
+
+<!--
+  /*
+**Problem**
+Implement a function that retrieves all the schedules that are available. 
+If one or more schedules are available, tally the count of schedules for each staff 
+and alert the user of result as "key: value" pairs with the staff id as key 
+(in the format of 'staff {id}'; e.g, 'staff 1') and the count of schedules as the value. 
+
+If there are no schedules, alert the user that there are currently no schedules available for booking.
+
+When implementing the function, keep in mind that server has been known to slow down when there are more than 7 schedules 
+to retrieve. It doesn't always happen, but be sure to handle it accordingly. 
+Once 5 seconds have passed, cancel the retrieval and inform the user to try again.
+
+Finally, inform the user about the completion of the request regardless of the success or failure (timeout) of the request.
+
+Understanding the Problem
+
+- input:
+  - n/a
+
+- output:
+  - on success
+    - object [{staff id#: # of schedules},  {staff id#: # of schedules}]
+    - or alrert (no shcedules available for booking)
+  - on timeout
+    - inform user to try again
+  - inform user of request completion
+- model of problem:
+
+**Examples / Test Cases**
+
+
+**Data Structures**
+
+
+**Algorithm**
+*/
+-->
