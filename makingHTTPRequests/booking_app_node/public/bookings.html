@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>your page title goes here</title>
+    <meta charset="utf-8"/>
+    <style>
+      li {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bookings</h1>
+    <ul id="bookingsList">
+    </ul>
+    <script>
+      let bookingDates;
+      let bookingsList = document.getElementById('bookingsList');
+
+      function addListItemDetails(date, target) {
+        let request = new XMLHttpRequest();
+        request.open('GET', `/api/bookings/${date}`);
+        request.addEventListener('load', () => {
+          if (request.status === 200) {
+            let ulDetails = document.createElement('ul');
+            target.appendChild(ulDetails);
+            let dateDetails = JSON.parse(request.responseText);
+            dateDetails.forEach(detail => {
+              let liDetails = document.createElement('li')
+              liDetails.textContent = String(detail);
+              ulDetails.appendChild(liDetails);
+            });
+          } else {
+            alert(request.status);
+          }
+        });
+        request.send();
+      }
+
+      function addDateListItems() {
+        bookingDates.forEach(date => {
+          console.log(typeof date);
+          let li = document.createElement('li');
+          li.value = date;
+          li.textContent = date;
+          li.addEventListener('click', event => {
+
+            if (event.target.textContent === date) {
+              addListItemDetails(date, event.target);
+            }      
+          });
+          bookingsList.appendChild(li);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let request = new XMLHttpRequest();
+        request.open('GET', '/api/bookings');
+        request.addEventListener('load', () => {
+          bookingDates = JSON.parse(request.responseText);
+          addDateListItems();
+        });
+        request.send();
+      });
+    </script>
+  </body>
+</html>
+
+<!--
+  <!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Exercise 6</title>
+    <style>
+      #bookings-list > li {
+      cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bookings</h1>
+    <ul id="bookings-list">
+    </ul>
+
+    <script>
+      function bookingListTemplate(data) {
+        const li = document.createElement('li');
+        li.textContent = data;
+        return li;
+      }
+
+      function bookingDetailsTemplate(data) {
+        const ulEle = document.createElement('ul');
+        data.forEach(({staffName, studentEmail, time}) => {
+            const li = document.createElement('li');
+            li.textContent = `${staffName} | ${studentEmail} | ${time}`;
+            ulEle.appendChild(li);
+        });
+
+        return ulEle;
+      }
+
+      function renderBookingDetails(node, bookings) {
+        const bookingsObject = bookings.map(booking => ({
+            staffName: booking[0],
+            studentEmail: booking[1],
+            time: booking[2]
+        }));
+
+        node.appendChild(bookingDetailsTemplate(bookingsObject));
+      }
+
+      document.querySelector('#bookings-list').addEventListener('click',    ({target}) => {
+        if (target.tagName === 'LI') {
+            if (target.childElementCount === 0) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `/api/bookings/${target.textContent}`);
+                xhr.responseType = 'json'
+                xhr.send();
+                xhr.addEventListener('load', () => {
+                    data = xhr.response;
+                    renderBookingDetails(target, data);
+                });
+            }
+        }
+      });
+
+      (() => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/api/bookings');
+        xhr.responseType = 'json';
+        xhr.send();
+        xhr.addEventListener('load', () => {
+            const data = xhr.response;
+            const bookingList = document.querySelector('#bookings-list');
+            data.forEach(date => {
+                bookingList.appendChild(bookingListTemplate(date));
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>
+-->
