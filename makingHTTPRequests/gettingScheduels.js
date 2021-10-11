@@ -35,4 +35,3 @@ Understanding the Problem
 
 **Algorithm**
 */
-console.log('Hello from JS file!');
