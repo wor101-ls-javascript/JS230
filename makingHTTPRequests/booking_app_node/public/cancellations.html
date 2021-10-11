@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>your page title goes here</title>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <form id="schedule">
+      <h1>Cancel Schedule</h1>
+      <label for="schedule_id">Schedule ID:</label>
+      <input type="text" name="schedule_id"/><br/>
+      <input type="submit" value="Submit"/>
+    </form>
+    <form id="booking">
+      <h1>Cancel Booking</h1>
+      <label for="booking_id">Booking ID:</label>
+      <input type="text" name="booking_id"/><br/>
+      <input type="submit" value="Submit"/>
+    </form>
+    <script>
+      let scheduleCancellationForm = document.getElementById('schedule');
+      let bookingCancellationForm = document.getElementById('booking');
+      let schedules;
+      let bookings;
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let schedRequest = new XMLHttpRequest();
+        schedRequest.open('GET', '/api/schedules');
+        schedRequest.addEventListener('load', () => { 
+          schedules = JSON.parse(schedRequest.responseText)
+          console.log(schedules);
+        });
+        schedRequest.send();
+      
+        // let bookRequest = new XMLHttpRequest();
+        // bookRequest.open('GET', '/api/bookings')
+
+
+
+        scheduleCancellationForm.addEventListener('submit', event => {
+          event.preventDefault();
+          let scheduleID = scheduleCancellationForm.querySelector('input[name="schedule_id"]').value;
+          let request = new XMLHttpRequest();
+          request.open('DELETE', `/api/schedules/${scheduleID}`);
+          request.addEventListener('load', () => {
+            console.log('load successful ' + scheduleID);
+            if (request.status === 204) {
+              alert('Schedule deleted');
+              console.log('delete successfull with 204 status');
+            } else {
+              alert(request.responseText);
+              console.log('error received');
+            }
+          });
+          request.send();
+        });
+
+        bookingCancellationForm.addEventListener('submit', event => {
+          event.preventDefault();
+          let bookingID = bookingCancellationForm.querySelector('input[name="booking_id"]').value;
+          let request = new XMLHttpRequest();
+          console.log(bookingID);
+          request.open('PUT', `/api/bookings/${bookingID}`);
+          request.addEventListener('load', () => {
+            console.log('load successful');
+            if (request.status === 204) {
+              alert('Booking deleted');
+              console.log('status = 204');
+            } else {
+              alert(request.responseText);
+              console.log('error received');
+            }
+          });
+          request.send();
+        });
+
+      });
+    </script>
+  </body>
+</html>
