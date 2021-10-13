@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Fluid Layout Gallery</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="gallery.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="javascripts/gallery.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>My Photo Gallery</h1>
+      <figure data-block="first">
+        <img src="http://placehold.it/1200x900" alt="" />
+        <figcaption>Photo 1</figcaption>
+      </figure>
+      <figure data-block="second" hidden="true">
+        <img src="http://placehold.it/1200x900" alt="" />
+        <figcaption>Photo 2</figcaption>
+      </figure>
+      <figure data-block="third" hidden="true">
+        <img src="http://placehold.it/1200x900" alt="" />
+        <figcaption>Photo 3</figcaption>
+      </figure>
+      <figure data-block="fourth" hidden="true">
+        <img src="http://placehold.it/1200x900" alt="" />
+        <figcaption>Photo 4</figcaption>
+      </figure>
+      <ul>
+        <li><img src="http://placehold.it/1200x900" alt="" title="Photo 1" class="active" data-block="first"/></li>
+        <li><img src="http://placehold.it/1200x900" alt="" title="Photo 2" data-block="second"/></li>
+        <li><img src="http://placehold.it/1200x900" alt="" title="Photo 3" data-block="third"/></li>
+        <li><img src="http://placehold.it/1200x900" alt="" title="Photo 4" data-block="fourth"/></li>
+      </ul>
+    </main>
+  </body>
+</html>
