@@ -83,9 +83,11 @@ var inventory;
     },
     deleteItem: function(e) {
       e.preventDefault();
-      var $item = this.findParent(e).remove();
+      let item = this.findParent(e).cloneNode([deep]);
+      this.findParent(e).remove();
+      //var $item = this.findParent(e).remove();
 
-      this.remove(this.findID($item[0]));
+      this.remove(this.findID(item));
     },
     updateItem: function(e) {
       let item = this.findParent(e);
