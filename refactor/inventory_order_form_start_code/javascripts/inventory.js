@@ -10,12 +10,11 @@ var inventory;
       // $("#order_date").text(date.toUTCString());
     },
     cacheTemplate: function() {
+      let inventory = document.getElementById('inv_item');
+      this.invTemplate = Handlebars.compile(inventory.innerHTML);
 
-      // let inventoryItems = Array.prototype.slice.call(document.querySelectorAll('#inventory_item'));
-      // var iTmpl = inventoryItems[0].remove();
-      // inventoryItems.forEach(item => {item.remove()});
-      var $iTmpl = $("#inventory_item").remove();
-      this.template = $($iTmpl).html();
+      // var $iTmpl = $("#inventory_item").remove();
+      // this.template = $($iTmpl).html();
     },
     add: function() {
       this.lastId++;
@@ -62,10 +61,16 @@ var inventory;
     },
     newItem: function(e) {
       e.preventDefault();
-      var item = this.add(),
-          $item = $(this.template.replace(/ID/g, item.id));
+      var item = this.add();
+      //    $item = $(this.template.replace(/ID/g, item.id));
 
-      $("#inventory").append($item);
+      let newItem = this.invTemplate(item);
+      let newTR = document.createElement('TR');
+      newTR.innerHTML = newItem;
+
+      document.getElementById('inventory').appendChild(newTR);
+
+      //$("#inventory").append($item);
     },
     findParent: function(e) {
       let currentNode = e.target;
@@ -83,7 +88,7 @@ var inventory;
     },
     deleteItem: function(e) {
       e.preventDefault();
-      let item = this.findParent(e).cloneNode([deep]);
+      let item = this.findParent(e).cloneNode(true);
       this.findParent(e).remove();
       //var $item = this.findParent(e).remove();
 
@@ -106,13 +111,13 @@ var inventory;
       document.querySelector("#inventory").addEventListener('click', function(event) {
         if (event.target.classList.contains('delete')) {
           event.preventDefault();
-          self.findParent(event).remove();
+          self.deleteItem.call(self, event);
+          //self.findParent(event).remove();
         }
       });
 
-      // let inventoryInputs = document.querySelectorAll("#inventory input")
-      // inventoryInputs.forEach(input => {input.addEventListener('blur', self.updateItem)})
-      $("#inventory").on("blur", ":input", $.proxy(this.updateItem, this));
+     document.querySelector("#inventory").addEventListener('focusout', self.updateItem.bind(self));
+      //$("#inventory").on("blur", ":input", $.proxy(this.updateItem, this));
     },
     init: function() {
       this.setDate();
@@ -122,4 +127,7 @@ var inventory;
   };
 })();
 
-$($.proxy(inventory.init, inventory));
+document.addEventListener('DOMContentLoaded', event => inventory.init.bind(inventory)());
+
+
+// $($.proxy(inventory.init, inventory));
