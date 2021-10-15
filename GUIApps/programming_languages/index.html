@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Programming Languages</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+</head>
+<body>
+  <h1>Programming Languages</h1>
+  <div id="languages">
+    
+  </div>
+
+  <script src="app.js"></script>
+  <script id="languageTemplate" type="text/x-handlebars">
+    {{#each languages}}
+      <div id={{name}}>
+        <h2>{{name}}</h2>
+        <p>{{description}}</p>
+        <button class="more">Show More</button>
+      </div>
+    {{/each}}
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+body {
+  background-color: lightslategray;
+}
+
+h1 {
+  color: black;
+  text-align: center;
+}
+
+#todos {
+  display: flex;
+  margin: auto;
+  background-color: white;
+  flex-direction: column;
+  width: 80%;
+  height: 500px;
+}
+
+.todo {
+  border: 2px solid red;
+}
+
+#delete_confirmation {
+  position: fixed;
+  width: 200px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -50px;
+  padding: 10px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid black;
+
+  z-index: 1;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.popup button {
+  display: inline-block;
+  margin: 5px;
+}
+
+#context-menu {
+  flex-direction: column;
+  position: absolute;
+  height: 70px;
+  width: 100px;
+  z-index: 10;
+  background-color: lightskyblue;
+}
