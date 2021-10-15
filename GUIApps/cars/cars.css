@@ -19,13 +19,51 @@ header h1 {
 #filter_form select {
   width: 80px;
   height: 25px;
+  margin-left: 5px;
+  margin-right: 5px;
   border-radius: 7px;
+  background-color: #e29921;
+  color: white;
+  text-align: center;
 }
 
 #filter_form input {
   height: 25px;
   width: 50px;
+  margin-left: 5px;
   background-color: #e29921;
+  color: white;
   border: 1px solid white;
   border-radius: 7px;
+}
+
+body {
+  width: 100vw;
+}
+
+#cars {
+  display: flex;
+  width: 100vw;
+  flex-wrap: wrap;
+}
+
+#cars li {
+  height: 20%;
+  width: 12%;
+  padding: 1%;
+}
+
+#cars li img {
+  width: 100%;
+  height: auto;
+}
+
+#cars li button {
+  background-color: #e29921;
+  padding: 8px 12px;
+  color: white;
+  font-weight: bolder;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
