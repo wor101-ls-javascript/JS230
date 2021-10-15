@@ -229,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     request.send(data.toString());
 
+    // LS solution to fetch
     // fetch(href, {
     //   method: method,
     //   headers: {
