@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let previous = document.querySelector('a.prev');
   let next = document.querySelector('a.next');
   let currentIndex = 0;
+  let commentsForm = document.querySelector('#comments > form');
 
   document.querySelectorAll("script[type='text/x-handlebars']").forEach(tmpl => {
     templates[tmpl["id"]] = Handlebars.compile(tmpl["innerHTML"]);
@@ -23,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let photo = photos.filter(photo => photo.id === id)[0];
     let header = document.querySelector("section > header");
     header.insertAdjacentHTML('beforeend', templates.photo_information(photo));
+    updateLikeButton(photo.id);
+    updateFavoriteButton(photo.id);
   }
 
   function clearPhotoInformation() {
@@ -36,6 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderComments() {
     let commentsList = document.querySelector('#comments > ul');
     commentsList.insertAdjacentHTML('beforeend', templates.photo_comments({ comments: comments }))
+  }
+
+  function renderComment(newComment) {
+    let commentsList = document.querySelector('#comments > ul');
+    commentsList.insertAdjacentHTML('beforeend', templates.photo_comment(JSON.parse(newComment)))
+  }
+
+  function clearCommentsForm() {
+    let commentsForm = document.querySelector('#comments > form');
+    document.getElementById('name').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('body').value = '';
   }
 
   function clearComments() {
@@ -52,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
       comments = json;
       renderComments();
     });
+    updateCommentFormId(photoId);
+  }
+
+  function updateCommentFormId(id) {
+    let input = document.querySelector('#comments > form > fieldset > input[name="photo_id"')
+    input.value = id;
   }
 
   function getNextFigureElement(nextIndex) {
@@ -61,6 +82,61 @@ document.addEventListener('DOMContentLoaded', () => {
       let id = parseInt(fig.dataset.id, 10);
       return nextPhotosId === id;
     })[0];  
+  }
+
+  function updateLikeButton(id) {
+    let likeButton = document.querySelector('.button.like');
+    likeButton.addEventListener('click', event => {
+      event.preventDefault();
+      let idJSON = JSON.stringify({ 'photo_id': id });
+
+      fetch('/photos/like', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: idJSON,
+      })
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        let currentCount = likeButton.textContent.match(/\d+/);
+        likeButton.textContent = likeButton.textContent.replace(currentCount, json['total']);
+      });
+    });
+  }
+
+  function updateFavoriteButton(id) {
+    let favoriteButton = document.querySelector('.button.favorite');
+    let url = favoriteButton.getAttribute('href');
+    favoriteButton.addEventListener('click', event => {
+      event.preventDefault();
+      console.log(id);
+      let idJSON = JSON.stringify({ 'photo_id': id});
+
+      let request = new XMLHttpRequest();
+      request.open('POST', '/photos/favorite');
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+      request.addEventListener('load', () => {
+        let currentCount = favoriteButton.textContent.match(/\d+/);
+        let newCount = JSON.parse(request.response);
+        favoriteButton.textContent = favoriteButton.textContent.replace(currentCount, newCount['total']);
+      });
+      request.send('photo_id=' + String(id));
+    });
+
+    //   fetch(url, {
+    //     method: 'POST',
+    //     header: {
+    //       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    //     },
+    //     body: 'photo_id=' + id,
+    //   })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //     console.log(json);
+    //   });
+    // });
   }
 
   fetch('/photos')
@@ -135,7 +211,40 @@ document.addEventListener('DOMContentLoaded', () => {
     
   });
 
+  commentsForm.addEventListener('submit', event => {
+    event.preventDefault();
+    console.log('Click!');
+    let data = new FormData(commentsForm);
+    data = new URLSearchParams(data);
+    let url = '/comments/new';
 
+    let request = new XMLHttpRequest();
+    request.open('POST','/comments/new');
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.addEventListener('load', () => {
+      console.log(request.response);
+      renderComment(request.response);
+      clearCommentsForm();
+      // need to update comments on page with new comment
+    });
+    request.send(data.toString());
+
+    // fetch(href, {
+    //   method: method,
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    //   },
+    //   body: new URLSearchParams([...data])
+    // })
+    // .then(response => response.json())
+    // .then(json => {
+    //   let commentsList = document.querySelector('#comments ul');
+    //   commentsList.insertAdjacentHTML('beforeend', templates.photo_comment(json));
+    //   form.reset();
+    // });
+
+  });
+    
 
 
 
