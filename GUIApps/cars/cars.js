@@ -8,34 +8,80 @@ const cars = [
   { make: 'Audi', image: 'images/audi-a4-2013.jpg', model: 'A4', year: 2013, price: 26000 },
 ];
 let carsList = document.getElementById('cars');
+let filterForm = document.getElementById('filter_form')
 
-function renderCarListItems() {
+function renderCarListItems(carData) {
   let carTemplate = document.getElementById('car_template');
   let carScript = Handlebars.compile(carTemplate.innerHTML);
-  carsList.innerHTML = carScript({ 'cars': cars });
-
+  carsList.innerHTML = carScript({ 'cars': carData });
 }
 
 function renderSelectOptions() {
-  let makeTemplate = document.getElementById('make_options_template');
-  let modelTemplate = document.getElementById('model_options_template');
-  let yearTemplate = document.getElementById('year_options_template');
-  let priceTemplate = document.getElementById('price_options_template');
+  let optionsTemplate = document.getElementById('options_template');
+  let optionScript = Handlebars.compile(optionsTemplate.innerHTML);
 
-  let makeScript = Handlebars.compile(makeTemplate.innerHTML);
-  let modelScript = Handlebars.compile(modelTemplate.innerHTML);
-  let yearScript = Handlebars.compile(yearTemplate.innerHTML);
-  let priceScript = Handlebars.compile(priceTemplate.innerHTML);
+  let uniqueMakeData = getUniqueData('make');
+  document.getElementById('make').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniqueMakeData }));
 
-  let carsData = { 'cars': cars };
-  document.getElementById('make').insertAdjacentHTML('beforeend', makeScript(carsData));
-  document.getElementById('model').insertAdjacentHTML('beforeend', modelScript(carsData));
-  document.getElementById('year').insertAdjacentHTML('beforeend', yearScript(carsData));
-  document.getElementById('price').insertAdjacentHTML('beforeend', priceScript(carsData));
+  let uniqueModelData = getUniqueData('model');
+  document.getElementById('model').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniqueModelData}));
+
+  let uniquePriceData = getUniqueData('price');
+  document.getElementById('price').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniquePriceData}));
+
+  let uniqueYearData = getUniqueData('year');
+  document.getElementById('year').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniqueYearData}));
 
 }
 
+function getUniqueData(option) {
+  let uniqueData = [];
+  let data = cars.map(car => car[option]);
+  data.forEach(car => {
+    if (!uniqueData.includes(car)) {
+      uniqueData.push(car);
+    }
+  });
+  return uniqueData.map(car => { 
+    return { option: car };
+  });
+}
+
+function renderFilterMatches(filters) {
+  let matchingCars = cars.slice();
+
+  filters.forEach(filter => {
+    let filterKey = Object.keys(filter)[0];
+    let filterValue = filter[filterKey];
+    matchingCars = matchingCars.filter(car => {
+      return String(car[filterKey]) === filterValue;
+    })
+  });
+
+  renderCarListItems(matchingCars);
+  console.log(matchingCars);
+}
+
+function addFilterListener() {
+  filterForm.addEventListener('submit', event => {
+    event.preventDefault();
+    let filters = [];
+  
+    let formData = new FormData(event.currentTarget)
+    const data = {}
+    formData.forEach((value, key) => {data[key] = value});
+    Object.keys(data).forEach((category, index) => {
+      if (data[category] !== 'all') {
+        filters.push({ [category]: data[category] });
+      }
+    });
+    console.log(filters);
+    renderFilterMatches(filters);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  renderCarListItems();
+  renderCarListItems(cars);
   renderSelectOptions();
+  addFilterListener();
 });

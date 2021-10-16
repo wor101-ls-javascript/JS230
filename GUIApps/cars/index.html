@@ -21,7 +21,7 @@
         </select>
         <label for="price">Price</label>
         <select id="price" name="price">
-          <option id="all">Any</option>
+          <option value="all">Any</option>
         </select>
         <label for="year">Year</label>
         <select id="year" name="year">
@@ -45,24 +45,9 @@
         </li>
       {{/each}}
     </script>
-    <script id="make_options_template" type="text/x-handlebar">
+    <script id="options_template" type="text/x-handlebar">
       {{#each cars}}
-        <option value={{make}}>{{make}}</option>
-      {{/each}}
-    </script>
-    <script id="model_options_template" type="text/x-handlebar">
-      {{#each cars}}
-        <option value={{model}}>{{model}}</option>
-      {{/each}}
-    </script>
-    <script id="year_options_template" type="text/x-handlebar">
-      {{#each cars}}
-        <option value={{year}}>{{year}}</option>
-      {{/each}}
-    </script>
-    <script id="price_options_template" type="text/x-handlebar">
-      {{#each cars}}
-        <option value={{price}}>{{price}}</option>
+        <option value={{option}}>{{option}}</option>
       {{/each}}
     </script>
     <script src="cars.js"></script>
