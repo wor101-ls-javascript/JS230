@@ -94,9 +94,6 @@ function addFilterListener() {
     clearSelectOptions()
     renderSelectOptions(filteredCars);
     setSelectedOptions(filters);
-    
-    // need to fix any to 
-    // set preselected cars using filters
     console.log(filters);
 
   });

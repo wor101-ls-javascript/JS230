@@ -1,0 +1,30 @@
+body {
+  background-color: #a19123;
+}
+
+#clock {
+  margin-top: 100px;
+  text-align: center;
+  font-size: 80px;
+  font-weight: bold;
+  color: white;
+}
+
+#clock div{
+  display: inline-block;
+}
+
+#buttons {
+  text-align: center;
+}
+
+#buttons button {
+  padding: 15px 25px;
+  background-color: #a19123;
+  color: white;
+  font-size: large;
+  font-weight: bold;
+  border: 1px solid white;
+  border-radius: 7px;
+  cursor: pointer;
+}
