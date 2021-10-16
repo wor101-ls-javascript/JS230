@@ -10,33 +10,34 @@ const cars = [
 let carsList = document.getElementById('cars');
 let filterForm = document.getElementById('filter_form')
 
+
 function renderCarListItems(carData) {
   let carTemplate = document.getElementById('car_template');
   let carScript = Handlebars.compile(carTemplate.innerHTML);
   carsList.innerHTML = carScript({ 'cars': carData });
 }
 
-function renderSelectOptions() {
+function renderSelectOptions(carData = cars) {
   let optionsTemplate = document.getElementById('options_template');
   let optionScript = Handlebars.compile(optionsTemplate.innerHTML);
 
-  let uniqueMakeData = getUniqueData('make');
+  let uniqueMakeData = getUniqueData('make', carData);
   document.getElementById('make').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniqueMakeData }));
 
-  let uniqueModelData = getUniqueData('model');
+  let uniqueModelData = getUniqueData('model', carData);
   document.getElementById('model').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniqueModelData}));
 
-  let uniquePriceData = getUniqueData('price');
+  let uniquePriceData = getUniqueData('price', carData);
   document.getElementById('price').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniquePriceData}));
 
-  let uniqueYearData = getUniqueData('year');
+  let uniqueYearData = getUniqueData('year', carData);
   document.getElementById('year').insertAdjacentHTML('beforeend', optionScript({ 'cars': uniqueYearData}));
 
 }
 
-function getUniqueData(option) {
+function getUniqueData(option, carData = cars) {
   let uniqueData = [];
-  let data = cars.map(car => car[option]);
+  let data = carData.map(car => car[option]);
   data.forEach(car => {
     if (!uniqueData.includes(car)) {
       uniqueData.push(car);
@@ -47,7 +48,7 @@ function getUniqueData(option) {
   });
 }
 
-function renderFilterMatches(filters) {
+function getFilteredCars(filters) {
   let matchingCars = cars.slice();
 
   filters.forEach(filter => {
@@ -55,30 +56,71 @@ function renderFilterMatches(filters) {
     let filterValue = filter[filterKey];
     matchingCars = matchingCars.filter(car => {
       return String(car[filterKey]) === filterValue;
-    })
+    });
   });
 
-  renderCarListItems(matchingCars);
+  // renderCarListItems(matchingCars);
   console.log(matchingCars);
+  return matchingCars;
 }
 
 function addFilterListener() {
-  filterForm.addEventListener('submit', event => {
-    event.preventDefault();
+  function getFilters(event){
     let filters = [];
   
     let formData = new FormData(event.currentTarget)
     const data = {}
     formData.forEach((value, key) => {data[key] = value});
     Object.keys(data).forEach((category, index) => {
+      // filters.push({ [category]: data[category] });
       if (data[category] !== 'all') {
         filters.push({ [category]: data[category] });
       }
     });
+    return filters;
+  }
+
+  filterForm.addEventListener('submit', event => {
+    event.preventDefault();
+    let filters = getFilters(event);
+    let matchingCars = getFilteredCars(filters);
+    renderCarListItems(matchingCars);
+  });
+
+  filterForm.addEventListener('input', event => {
+    event.preventDefault();
+    let filters = getFilters(event);
+    let filteredCars = getFilteredCars(filters);
+    clearSelectOptions()
+    renderSelectOptions(filteredCars);
+    setSelectedOptions(filters);
+    
+    // need to fix any to 
+    // set preselected cars using filters
     console.log(filters);
-    renderFilterMatches(filters);
+
   });
 }
+
+function setSelectedOptions(filters) {
+  let options = Array.prototype.slice.call(filterForm.querySelectorAll('option'));
+  filters.forEach(filter => {
+    let option = options.filter(opt => opt.value === Object.values(filter)[0])[0];
+    option.setAttribute('selected', 'true');
+  });
+}
+
+function clearSelectOptions() {
+  let selects = Array.prototype.slice.call(filterForm.querySelectorAll('option'));
+  selects.forEach(select => {
+    if (select.value !== 'all') {
+      select.remove();
+    }
+  });
+}
+
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
   renderCarListItems(cars);
