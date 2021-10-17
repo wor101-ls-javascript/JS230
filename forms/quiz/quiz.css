@@ -1,0 +1,59 @@
+body {
+  background-color: #eee9ce;
+}
+
+header {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main div {
+  margin-bottom: 50px;
+}
+
+button {
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+input[type="submit"] {
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: green;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+}
+
+button.reset {
+  background-color: darkgray;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+p[name="result"] {
+  padding: 15px;
+  width: 100%;
+  text-align:;
+  
+}
+
+p.correct {
+  border: 1px solid green;
+}
+
+p.wrong {
+  border: 1px solid red;
+}

@@ -1,0 +1,100 @@
+body {
+  background-color: #52be43;
+}
+
+header {
+  width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+header h1 {
+  color: white;
+}
+
+main {
+  box-sizing: border-box;
+  width: 65%;
+  height: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  background-color: white;
+
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding: 25px 10px;
+}
+
+#submit_error {
+  color: red;
+}
+
+form div > label{
+  display: block;
+}
+
+
+
+form label {
+  padding: 10px 0 5px 0;
+  font-size: 18px;
+}
+
+form input {
+  display: inline-block;
+  height: 38px;
+  width: 300px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  font-size: 18px;
+}
+
+form input.input_error {
+  border: 1px solid red;
+}
+
+form input[type="submit"] {
+  margin-top: 10px;
+  background-color: #52be43;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+form input .invalid {
+  border-color: red;
+  background-color: #FDD;
+}
+
+form input[name="creditcard"] {
+  width: 68px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.error {
+  display: inline-block;
+  
+  width: auto;
+  padding-left: 20px;
+
+
+  font-size: 18px;
+  color: red;
+  background-color: white;
+  border-radius: 0 0 5px 5px;
+
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}
